@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitts</title>
+
+    <link rel="stylesheet" href="/CSS/twitts.css">
+
+</head>
+<body>
+    <form action="" id="twittsform">    
+
+        <div class="main">
+            <div class="details">
+    
+                    <div>
+                        <img src="https://cdn-icons-png.flaticon.com/128/3670/3670151.png" alt="photo">
+                    </div>
+                    <div class="name">
+                        <label for=""><%=data.first_name%>  <%=data.last_name%></label>
+                        <label for="" class="email"><%=data.email%></label>
+                    </div>
+            </div>
+
+            <br>
+            
+            <div id="twittes">
+                <input type="text" name="twitts" id="twitts" placeholder="what's happening..">
+            </div>
+
+            <br>
+            
+            <div class="button">
+    
+                <input type="submit" name="submit" id="button" value="POST">
+    
+            </div>
+    
+        </div>
+
+
+    </form>
+
+
+
+
+    <script>
+        let form = document.getElementById('twittsform')
+
+        form.addEventListener('submit',async (e) => {
+            e.preventDefault();
+
+            let twittsFormData = new FormData(form);
+
+            let respone = await fetch('/deshboard/new/twitts', {
+                method : 'POST',
+                headers : {
+                        'Content-Type' : 'application/x-www-form-urlencoded',
+                },
+                body : new URLSearchParams(twittsFormData).toString()
+            })
+
+            if(!respone.ok){
+                let result = await respone.json();
+                console.log(result.msg);
+            }
+
+            let result = await respone.json();
+            alert(result.msg);
+
+            window.location.href = '/allpost'
+
+        })
+
+
+
+
+    </script>
+    
+
+
+
+</body>
+</html>

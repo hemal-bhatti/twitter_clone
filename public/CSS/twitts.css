@@ -1,0 +1,80 @@
+body {
+    background-color:#545454;
+    display: flex;
+    justify-content: center;
+    margin-top: 150px;
+}
+
+.main {
+    border-radius: 15px;
+    width: 400px;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+::placeholder{
+    color: #642626;
+}
+
+.details {
+    margin-left: 45px;
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px ;
+}
+.details img {
+    margin-top: -5px;
+    margin-left: -10px;
+    height: 40px;
+    width: 40px;
+}
+
+#twittes{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#twitts{
+    width: 300px;
+    height: 25px;
+    border-radius: 5px;
+}
+
+.name{
+    display: flex;
+    flex-direction: column;
+}
+
+.tweets, .time {
+    margin-left: 10px;
+}
+
+.time {
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.email, .time {
+    color: rgb(100, 132, 134);
+    font-size: 13px;
+}
+.button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#button {
+    border-radius: 5px;
+    height: 25px;
+    width: 80px;
+}
+
+#button:hover {
+    background-color: rgb(16, 141, 163);
+    color: white;
+}

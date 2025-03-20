@@ -1,0 +1,50 @@
+body{
+    height: 100%;
+    background-color:#545454;
+}
+
+.main {
+    border-radius: 15px;
+    width: 430px;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.details {
+    margin-left: 20px;
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px ;
+}
+.details img {
+    margin-top: -5px;
+    margin-left: -5px;
+    height: 40px;
+    width: 40px;
+}
+
+.name {
+    display: flex;
+    flex-direction: column;
+}
+.tweets, .time {
+    margin-left: 10px;
+}
+
+.time {
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+
+.email, .time {
+    color: rgb(187 167 167 / 72%);
+    font-size: 13px;
+}
+.button {
+    margin-top: 10px;
+    margin-left: 20px;
+    border-radius: 5px;
+}

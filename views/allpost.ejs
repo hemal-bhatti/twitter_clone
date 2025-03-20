@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>all Twittes</title>
+
+    <link rel="stylesheet" href="/CSS/allpost.css">
+
+   
+</head>
+<body>
+
+
+        <div id="allpostData">
+            
+        </div>
+   
+
+
+
+</body>
+
+    <script>
+
+
+function timeAgo(dateString) {
+    const pastDateInmilliSec = new Date(dateString); 
+    const now = new Date();
+    const diffInmillisec = now - pastDateInmilliSec;
+
+    const diffInSec = Math.floor(diffInmillisec / 1000);
+    const diffInMin = Math.floor(diffInmillisec / (1000 * 60));
+    const diffInHours = Math.floor(diffInmillisec / (1000 * 60 * 60)); 
+    const diffInDays = Math.floor(diffInmillisec / (1000 * 60 * 60 * 24));
+    const diffInWeeks = Math.floor(diffInmillisec / (1000 * 60 * 60 * 24 * 7)); 
+    const diffInMonths = Math.floor(diffInmillisec / (1000 * 60 * 60 * 24 * 30)); 
+
+    if(diffInMonths > 1){
+        return `${diffInMonths} months ago`
+    }
+    else if(diffInWeeks >= 1 && diffInWeeks <= 4){
+        return `${diffInWeeks} weeks ago`
+    }
+    else if(diffInDays >= 1 && diffInDays <= 7){
+        return `${diffInDays} days ago`
+    }
+    else if(diffInHours >= 1 && diffInHours < 24){
+        return `${diffInHours} hours ago`
+    }
+    else if(diffInMin >= 1 && diffInMin <= 60){
+        return `${diffInMin} min ago`
+    }
+    else {
+        return `${diffInSec} second ago`
+    }
+
+}
+
+
+    let div = document.getElementById('allpostData');
+
+        async function getAllPost(){
+            let str = " "
+
+            let respone = await fetch('/deshboard/all/twitts')
+            
+            if(!respone.ok){
+                let result = await respone.json();
+                console.log(result.msg);
+            }
+
+            let result = await respone.json();
+            console.log(result);
+
+            for(let i=0;i<result.postData.length;i++){
+
+                if(result.postData[i].post_content == ''){
+                    i++;
+                }
+
+                 let time = timeAgo(result.postData[i].post_date);
+
+                str += 
+                `
+            <div class="main">
+                    <div class="details">
+
+                            <div>
+                                <img src="https://cdn-icons-png.flaticon.com/128/3670/3670151.png" alt="photo">
+                            </div>
+                            <div class="name">
+                                <label for=""> ${result.postData[i].first_name}  ${result.postData[i].last_name}</label>
+                                <label for="" class="email">${result.postData[i].email}</label>
+                            </div>
+                    </div>
+        
+                    <div class="tweets">
+                        ${result.postData[i].post_content}
+                    </div>
+        
+                    <div class="button">
+
+                        <button id='${result.postData[i].user_id}+${result.postData[i].post_id} ' name='${result.postData[i].post_id}' style="margin-top: 23px; color: rgb(94, 74, 23);height=10px;margin-bottom: 20px;  border-radius: 5px;" onclick='increaseLike(event)'> Like : ${result.postData[i].like_count}</button>
+                        <button id='${result.postData[i].user_id}+${result.postData[i].user_id}+${result.postData[i].post_id}' name='${result.postData[i].post_id}' style="margin-top: 23px; color: rgb(94, 74, 23);height=10px;margin-bottom: 20px;  border-radius: 5px;" onclick='addRetweet(event)'>ReTweet</button>
+                        <span><label id='${result.postData[i].user_id}+${result.postData[i].post_id}+${result.postData[i].post_id}'>  </label></span>
+
+                        <label class="time">${time} </label>
+
+                    </div>
+            </div>
+                    <br>
+                    <br>
+
+                `
+            }
+
+            div.innerHTML = str;
+
+            str =  ""
+
+        }
+
+        getAllPost();
+
+
+        
+
+
+
+        async function increaseLike(e){
+
+            e.preventDefault();
+
+            let postLikeId =  e.target.name;
+            let whoLikeId = e.target.id;
+            console.log(e.target.value);
+            let id = whoLikeId.split('+')[0];
+            // console.log(id);
+
+            let formdata = new FormData;
+            formdata.append('user_id', id)
+            formdata.append('post_id', postLikeId);
+
+            let respone = await fetch('/deshboard/all/twitts/likes', {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/x-www-form-urlencoded',
+                },
+                body : new URLSearchParams(formdata).toString()
+            })
+
+            if(!respone.ok){
+                let result = await respone.json();
+                // console.log(result.msg);
+                alert(result.msg)
+            }
+
+            let result = await respone.json();
+
+            if(result.likes[0]?.cnt == undefined){
+                // result.likes[0].cnt = 0;
+                document.getElementById(`${whoLikeId}`).innerHTML = `Like : 0`;
+                return;
+            }
+
+            document.getElementById(`${whoLikeId}`).innerHTML = `Like : ${result.likes[0]?.cnt}`;
+            
+        }
+
+
+        async function addRetweet(e){
+
+            e.preventDefault();
+           
+            let postId =  e.target.name;
+            let which_post_retweet_Id = e.target.id;
+            let id = which_post_retweet_Id.split('+')[0];
+
+
+            let textBox = document.getElementById(`${id}+${postId}+${postId}`);
+
+            // textBox.innerHTML = `<input type='text' id='${id}+${id}+${postId}+${postId}' name='${postId}' style="margin-top: 23px" placeholder='write your retweet..' value="">`
+            textBox.innerHTML = `<input type='text' id='hemal' name='reTweetData' style="margin-top: 23px" placeholder='write your retweet..' value="">
+            <button id='${id}+${postId}' name='${postId}' onclick='addingRetweet(event)'>POST</button>`
+
+            let tag = document.getElementById(which_post_retweet_Id).remove();
+
+        }
+
+
+    
+        async function addingRetweet(e) {
+            e.preventDefault();
+
+            let postId =  e.target.name;
+            let which_post_retweet_Id = e.target.id;
+            let id = which_post_retweet_Id.split('+')[0];
+            console.log(postId, id);
+            let data = document.getElementById('hemal').value
+
+            let formdata = new FormData;
+            formdata.append('user_id', id);
+            formdata.append('post_id', postId);
+            formdata.append('reTweetData', data);
+
+
+            let respone = await fetch('/deshboard/all/retweet', {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/x-www-form-urlencoded',
+                },
+                body : new URLSearchParams(formdata).toString()
+            })
+
+            if(!respone.ok){
+                let result = await respone.json();
+                alert(result.msg)
+            }
+
+            let result = await respone.json();
+
+            window.location.href = '/retweet'
+        }
+    
+    </script>
+    
+
+</html>
+
+
+
+
+<!-- 
+
+            let postData = document.getElementById(`${id}+${id}+${postId}`)
+            // postData.setAttribute("type", 'submit')
+            postData.textContent = 'POST'
+
+
+            e.removeEventListener;
+
+            postData.addEventListener('click', async (e) => {
+
+                e.preventDefault();
+                console.log(e.target.parentNode);
+                let which_postRetweetId =  e.target.name;
+                let which_user_retweet = e.target.id;
+                let user_retweet = which_post_retweet_Id.split('+')[0];
+                console.log(which_postRetweetId, user_retweet);
+                
+                console.log(e.target.previousElementSibling.firstChild);
+                // let textData = document.getElementById(`${user_retweet}+${user_retweet}+${which_postRetweetId}+${which_postRetweetId}`).value;
+                let textData = document.getElementById(`hemal`).value;
+
+                console.log(textData);
+
+                
+                let formdata = new FormData;
+                formdata.append('user_id', id)
+                formdata.append('post_id', postId);
+
+
+            let respone = await fetch('http://localhost:3000/deshboard/all/retweet', {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/x-www-form-urlencoded',
+                },
+                body : new URLSearchParams(formdata).toString()
+            })
+
+            if(!respone.ok){
+                let result = await respone.json();
+                alert(result.msg)
+            }
+
+            let result = await respone.json();
+
+            // window.location.href = '/retweet'
+            })
+
+           
+
+-->

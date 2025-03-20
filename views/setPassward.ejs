@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>set Passward</title>
+    <link rel="stylesheet" href="/CSS/setpassward.css">
+    
+</head>
+<body>
+
+    <form action="" id="setpassward">
+
+        <div>
+        <label for="passward">Passward : </label>
+        <input type="password" name="passward" id="passward">
+        </div>
+        <br><br>
+
+        <div>
+        <label for="re_passward">Re-Passward : </label>
+        <input type="password" name="re_passward" id="re_passward">
+        </div>
+        <br><br>
+
+        <input type="submit" name="submit" id="submit" value="submit">
+
+    </form>
+</body>
+
+    <script>
+        let setpasswardForm = document.getElementById('setpassward')
+
+        setpasswardForm.addEventListener('submit',async (e) => {
+
+            e.preventDefault();
+
+            let setpasswardFormdata = new FormData(setpasswardForm);
+
+            let respone = await fetch('/setpassward', {
+                   method : 'POST',
+                   headers : {
+                        'Content-Type' : 'application/x-www-form-urlencoded',
+                   },
+                   body : new URLSearchParams(setpasswardFormdata).toString()
+                  
+                })
+
+                if(!respone.ok){
+                    let result = await respone.json();
+                    alert = `${result.msg}`
+                    console.log('error bcz of you not set same passward in both field!');
+                }
+
+                 window.location.href = '/login'
+        })
+
+    </script>
+
+</html>

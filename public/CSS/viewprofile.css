@@ -1,0 +1,150 @@
+       body{
+        background-color:#545454;
+        font-family: "Poppins", sans-serif;
+        font-weight: 300;
+       }
+
+       .container{
+        height: 100vh;
+       }
+
+       .card{
+
+        width: 380px;
+        border: none;
+        border-radius: 15px;
+        padding: 8px;
+        background-color: #fff;
+        position: relative;
+        height: 370px;
+       }
+
+       .upper{
+
+        height: 100px;
+
+       }
+
+       .upper img{
+
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+       }
+
+       .user{
+        position: relative;
+       }
+
+       .profile img{
+        
+        height: 80px;
+        width: 80px;
+        margin-top:0px;
+        margin-left: -5px;
+        border-radius: 100%;   
+       }
+
+       .profile{
+
+        position: absolute;
+        top:-50px;
+        left: 38%;
+        height: 70px;
+        width: 70px;
+        border:3px solid #fff;
+
+        border-radius: 100%;
+
+       }
+
+       .stats span{
+        font-size: 29px;
+       }
+
+       .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       }
+
+
+       #userdetails {
+        margin-top: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+       }
+
+       #userfollow{
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        align-items: center;
+       }
+
+       table,tr, td,th {
+        border-collapse: collapse;
+        border-color: black;
+        border: 1px solid;
+
+    }
+
+    #section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #dataOfFollowers{
+        margin-top: -100px;
+    }
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #202021;
+    }
+
+    th {
+        background-color: #f5f8fa;
+        font-weight: bold;
+        color: #14171a;
+    }
+
+    td {
+        color: #657786;
+    }
+
+    td a, td button {
+        text-decoration: none;
+        padding: 8px 12px;
+        border-radius: 15px;
+        display: inline-block;
+    }
+
+    td a {
+        background-color: #737373;
+        color: white;
+    }
+
+    td a:hover {
+        background-color: #5c5c5c;
+    }
+
+    h5:hover{
+        cursor: pointer;
+    }

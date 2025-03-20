@@ -1,0 +1,22 @@
+body{
+    background-color:#545454;
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+   }
+form{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 100px;
+    align-items: center;
+}
+#submit{
+    height: 30px;
+    width: 100px;
+}
+
+#submit:hover{
+    background-color: rgb(65, 47, 47);
+    color: white;
+}

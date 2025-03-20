@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>view profile</title>
+
+    <link rel="stylesheet" href="/CSS/viewprofile.css">
+    
+</head>
+<body>
+    
+    <div id="section">
+
+            <div id="viewProfile">
+
+
+            </div>
+
+            <div>
+
+                <table id="dataOfFollowers">
+
+
+                </table>
+
+            </div>
+    </div>
+
+</body>
+
+    <script>
+    let div = document.getElementById('viewProfile');
+
+        async function goToProfile() {
+
+            let str = " "
+
+            let userUrl = window.location.href;
+            let id = userUrl.split('?')[1];
+            console.log(id);
+
+
+            let url = `/deshboard/viewprofile/?user_id=${id}`
+
+            let respone = await fetch(url)
+
+            if(!respone.ok){
+                let result = await respone.json();
+                alert(result.msg)
+            }
+
+            let result = await respone.json();
+            console.log(result.data);
+
+             
+
+                str += `
+                <div class="container">
+             
+             <div class="card">
+
+                <div class="upper">
+
+                    <img src="https://i.imgur.com/Qtrsrk5.jpg" class="img-fluid">
+                    
+                </div>
+
+              <div class="user">
+
+                <div class="profile">
+
+                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRIl_pe9IzK6c7SdKf2TS5_q8P43--awu73445aH07eisBuwzwa9vRlZM&s" class="rounded-circle" width="80">
+                  
+                </div>
+
+              </div>
+
+
+              <div class="mt-5 text-center">
+
+
+                <div id='userdetails'>
+                    <h4 class="mb-0">${result.data.selelctUser[0].first_name}  ${result.data.selelctUser[0].last_name}</h4>
+
+                    <span class="text-muted d-block mb-2"> ${result.data.selelctUser[0].email} </span>
+                    <span class="text-muted d-block mb-3"> +91-${result.data.selelctUser[0].phone_number} </span>
+
+                </div>
+                    
+                
+                
+                <div id='userfollow'>
+                
+                  <div class="stats">
+                    <h5 class="mb-0" id='${result.data.selelctUser[0].user_id}+follower' onclick='getData(event)'>Followers</h5>
+                    <span> ${result.data.followerCnt[0].cnt} </span>
+                  </div>
+
+
+                  <div class="stats">
+                    <h5 class="mb-0" id='${result.data.selelctUser[0].user_id}+following' onclick='getData(event)'>Following</h5>
+                    <span> ${result.data.followingCnt[0].cnt}</b></span>
+
+                  </div>
+                </div>
+
+                </div>
+                
+              </div>
+               
+             </div>
+
+           </div>`
+
+
+            div.innerHTML = str;
+            str =  " "
+
+        }
+        goToProfile()
+
+
+        async function getData(e) {
+            e.preventDefault();
+            let fullId = e.target.id;
+            let id = fullId.split('+')[0];
+            let string = fullId.split('+')[1];
+
+            let url = `/deshboard/viewprofile/follow-following-data/?user_id=${id}&string=${string}`
+            
+            let respone = await fetch(url);
+
+            let result = await respone.json();
+
+            console.log(result);
+            
+            if(result.data.length == 0) {
+                alert('Sorry, No Data available!')
+            }else{
+
+                let table = document.getElementById('dataOfFollowers')
+                table.innerHTML = ' ';
+
+                let str = " ";
+
+
+            for(let [key, value] of Object.entries(result.data[0])){
+                str += `<th> ${key} </th>`
+            }
+
+
+            str += `</tr>`
+
+
+            for(let i=0; i < result.data.length;i++){
+                str += `<tr>`
+
+                for(let [key, value] of Object.entries(result.data[i])){
+                    str += `<td> ${value} </td>`
+                }
+            }
+            str += `</tr>`
+
+                    table.innerHTML = str;
+                    str = ' '
+            }
+            
+        }
+
+    </script>
+
+</html>

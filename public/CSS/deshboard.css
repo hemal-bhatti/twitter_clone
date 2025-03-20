@@ -1,0 +1,180 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f8fa;
+    color: #14171a;
+    padding: 20px;
+}
+
+
+#button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e6ecf0;
+    margin-bottom: 20px;
+}
+
+#button h1 {
+    font-size: 24px;
+    color: #1da1f2;
+}
+
+#button div {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#twitts {
+    background-color: #1da1f2;
+    color: white;
+}
+
+#twitts:hover {
+    background-color: #1a91da;
+}
+
+#allpost {
+    background-color: #e8f5fd;
+    color: #1da1f2;
+}
+
+#allpost:hover {
+    background-color: #cce7f5;
+}
+
+#myProfile {
+    background-color: #e8f5fd;
+    color: #1da1f2;
+}
+
+#myProfile:hover {
+    background-color: #cce7f5;
+}
+
+#logout {
+    background-color: #ff6b6b;
+    color: white;
+}
+
+#logout:hover {
+    background-color: #ff5252;
+}
+
+
+#allTables {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #657786;
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #141414;
+}
+
+th {
+    background-color: #f5f8fa;
+    font-weight: bold;
+    color: #14171a;
+}
+
+td {
+    color: #657786;
+}
+
+td a, td button {
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 15px;
+    display: inline-block;
+}
+
+td a {
+    background-color: #737373;
+    color: white;
+}
+
+td a:hover {
+    background-color: #5c5c5c;
+}
+
+td button {
+    background-color: #fff;
+    color: #1da1f2;
+    border: 1px solid #1da1f2;
+}
+
+td button:hover {
+    background-color: #e8f5fd;
+}
+
+
+#paginationNumber {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#paginationNumber ul {
+    list-style: none;
+    display: inline-flex;
+    gap: 5px;
+}
+
+#paginationNumber li a {
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #1da1f2;
+    border: 1px solid #e6ecf0;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+#paginationNumber li a:hover {
+    background-color: #e8f5fd;
+}
+
+#paginationNumber li a#mid {
+    background-color: #1da1f2;
+    color: white;
+    border-color: #1da1f2;
+}
+
+
+#following h6 {
+    padding: 15px;
+    color: #657786;
+    text-align: center;
+}

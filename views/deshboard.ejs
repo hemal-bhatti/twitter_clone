@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deshboard</title>
+    <link rel="stylesheet" href="/CSS/deshboard.css">
+    
+
+</head>
+<body>
+    <div id="button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1245px-Logo_of_Twitter.svg.png" alt="" style="height: 80px; width: 100px;">
+
+        <div >
+            <button id="twitts">new Twitts</button>
+            <button id="allpost">Post</button>
+            <button id="myProfile" onclick="goToProfile(event)" >My Profile</button>
+            <button id="logout">LogOut</button>
+        </div>
+
+    </div>
+
+    <div id="allTables">
+        
+        <div>
+            <table id="following">
+               
+                
+
+            </table>
+        </div>
+
+        <br>
+        <br>
+
+        <div>
+            <h3>Peoples you migth knows..</h3>
+            <table id="table">
+                    
+                <!-- Table Data -->
+            </table>
+            <div id="paginationNumber">
+                <!-- Page Number of pagination -->
+            </div> 
+        </div>
+
+    </div>
+
+
+
+
+</body>
+
+<script>
+    function paginationNumber(page, lastPage) { 
+
+let paginationHtml = `<ul>`
+
+    if (page > 1) {
+        paginationHtml += `<li><a href="/deshboard/list/getdata/?page=1" id="first" onclick="getData(event)"> << </a></li>`;
+    }
+
+    if (page > 1) {
+    paginationHtml += `<li><a href="/deshboard/list/getdata/?page=${parseInt(page) -1}" id="second" onclick="getData(event)"> ${parseInt(page) -1} </a></li>`
+    }
+
+    paginationHtml +=  `<li><a href="/deshboard/list/getdata/?page=${page}" id="mid" onclick="getData(event)"> ${page} </a></li>`
+
+    if (page < lastPage) {
+        paginationHtml += `<li><a href="/deshboard/list/getdata/?page=${parseInt(page) +1}" id="seclast" onclick="getData(event)"> ${parseInt(page) +1} </a></li>`
+    }
+
+    if (page < lastPage) {
+        paginationHtml += `
+        <li><a href="/deshboard/list/getdata/?page=${lastPage}" id="last" onclick="getData(event)"> >> </a></li>`;
+    }
+
+paginationHtml += `</ul>`
+
+document.getElementById('paginationNumber').innerHTML = paginationHtml
+
+}
+
+
+    let uniUrl = '/deshboard/list/getdata/?page=1'
+    let str = "";
+
+    async function getTableData(url) {
+
+      let respone = await fetch(url, {
+           
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if(!respone.ok){
+            window.location.href = '/login'
+            throw new Error(`HTTP error! status: ${respone.status}`);
+        }
+
+        const result = await respone.json();
+       
+        let currPage = result.data.currentpage;
+        let totalpage = result.data.totalPage
+        
+        
+       
+            str += `<tr>`
+            for(let [key, value] of Object.entries(result.data.userDetail[0])){
+                str += `<th> ${key} </th>`
+            }
+
+
+            str += `
+            <th>View User Profile</th>
+            <th>Follow</th>
+            </tr>`
+            
+        
+
+        for(let i=0; i < result.data.userDetail.length;i++){
+
+            str += `<tr>`
+
+            for(let [key, value] of Object.entries(result.data.userDetail[i])){
+
+               str += `<td> ${value} </td>`
+            
+            }
+
+            str+= 
+            `<td><a id='${result.data.userDetail[i].user_id}' href='/deshboard/viewprofile/?user_id=${result.data.userDetail[i].user_id}' style="color : white; background : #737373" onclick='goToProfile(event)'>View User Profile</a></td>
+            <td><button id='${result.data.userDetail[i].user_id}' style="color : black; background : #fff" onclick='following(event)' >Follow</a></td>
+            `
+            
+            
+        }
+        str += `</tr>`
+
+        document.getElementById('table').innerHTML = str
+        str = ""
+        
+        paginationNumber(currPage, totalpage)
+    }
+
+    getTableData(uniUrl)
+
+
+
+    async function getData(e) {
+            e.preventDefault();
+            // console.log(e);
+            
+            let id = e.target.id
+            
+            if(id == 'first'){
+                getTableData(e.srcElement.href)
+            }else if(id == 'second'){
+                getTableData(e.srcElement.href)
+            }else if(id == 'mid'){    
+                getTableData(e.srcElement.href)
+            }else if(id == 'seclast'){
+                getTableData(e.srcElement.href)
+            }else if(id == 'last'){
+                getTableData(e.srcElement.href)
+            }
+        }
+
+
+     async function following(e){
+        e.preventDefault();
+
+        let formdata = new FormData();
+        formdata.append('whomfollow_id', e.target.id);
+        
+
+            let url = `/deshboard/list/follow`
+            
+            
+            let respone = await fetch(url, {
+                method : 'POST',
+                headers : {
+                    'Content-Type' : 'application/x-www-form-urlencoded',
+                },
+                body : new URLSearchParams(formdata).toString()
+            })
+
+            
+            if(!respone.ok){
+                let result = await respone.json();
+                alert(result.msg)
+            }
+
+            let result = await respone.json();
+            getTableData(uniUrl);
+            getFollowingData()
+
+        }
+
+
+    document.getElementById('twitts').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        window.location.href = '/twitts'
+
+    })
+
+    document.getElementById('allpost').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        window.location.href = '/allpost'
+
+    })
+
+
+    async function goToProfile(e) {
+
+        e.preventDefault();
+
+        window.location.href = `/viewprofile/?${e.target.id}`
+    }
+
+
+
+    async function getFollowingData() {
+        let str = " "
+      
+        let table = document.getElementById('following');
+        
+        let respone = await fetch('/deshboard/list/getdata')
+
+        if(!respone.ok){
+            let result = await respone.json()
+            alert(result.msg)
+        }
+        
+        let result = await respone.json();
+
+        
+        if(!result.data.yourFollower.length){
+            let newstr = " " 
+            newstr = `<h6> You are not following anyone!!</h6>`
+            table.innerHTML = newstr;
+            newstr = ""
+            return;
+        }
+
+
+        str += `
+            <tr>`
+
+
+            for(let [key, value] of Object.entries(result.data.yourFollower[0])){
+                str += `<th> ${key} </th>`
+            }
+
+
+            str += `
+            <th>View User Profile</th>
+            <th>Unfollow</th>
+            </tr>`
+
+            for(let i=0; i < result.data.yourFollower.length;i++){
+
+        str += `<tr>`
+
+        for(let [key, value] of Object.entries(result.data.yourFollower[i])){
+            str += `<td> ${value} </td>`
+        }
+
+
+        str+= 
+        `<td><a id='${result.data.yourFollower[i].user_id}' href='/deshboard/viewprofile/?user_id=${result.data.userDetail[i].user_id}' style="color : white; background : #737373" onclick='goToProfile(event)'>View User Profile</a></td>
+        <td><button id='${result.data.yourFollower[i].user_id}' style="color : white; background : #737373" onclick='following(event)' >Unfollow</a></td>
+        `
+        }
+                table.innerHTML = str;
+                
+                str = " "
+            
+        }
+    getFollowingData()
+
+
+
+    document.getElementById('logout').addEventListener('click', (e) => {
+        e.preventDefault();
+        let fullToken = document.cookie;
+        let token = fullToken.split('=')[0];
+        console.log(token);
+
+        deleteCookie(token)
+        
+        location.href = '/login'
+    
+    })
+
+    function deleteCookie(cookiename){
+        var d = new Date();
+        d.setDate(d.getDate() - 1);
+        var expires = ";expires="+d;
+        var name=cookiename;
+        var value="";
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+</script>
+
+</html>

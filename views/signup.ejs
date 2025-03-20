@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="/CSS/signup.css">
+
+</head>
+<body>
+    <form id="signupform" action="/signup/user" method="">
+
+        <fieldset>
+            <legend>Sign Up</legend>
+
+            <label for="first_name">First Name : </label>
+            <input type="text" name="first_name" id="first_name">
+           
+
+            <label for="last_name">Last Name : </label>
+            <input type="text" name="last_name" id="last_name">
+           
+
+            <label for="password">Phone : </label>
+            <input type="text" name="phone" id="phone">
+            
+
+            <label for="email">Email : </label>
+            <input type="text" name="email" id="email">
+            
+
+            <input type="submit" name="submit" id="submit" value="submit" style="background: rgb(0, 75, 0); color: white;">
+            <input type="reset" name="reset" id="reset" value="reset" style="background: black; color: white;">
+            <label for="" id="logInId">already account? <u id="logIn">LogIn</u></label>
+
+        </fieldset>
+    </form>    
+</body>
+
+        <script>
+
+            let signupForm = document.getElementById('signupform')
+
+            signupForm.addEventListener('submit',async (e) => {
+
+                e.preventDefault();
+
+                let signupformData = new FormData(signupForm)
+
+                let respone = await fetch('/signup/user', {
+                   method : 'POST',
+                   headers : {
+                        'Content-Type' : 'application/x-www-form-urlencoded',
+                   },
+                   body : new URLSearchParams(signupformData).toString()
+                  
+                })
+
+                if(!respone.ok){
+                    let result = await respone.json();
+                    alert(`${result.data}`)
+                    console.log('Error in signupUser');
+                }
+                
+                let result = await respone.json();
+
+               document.cookie = `Token=${result.data}`
+                
+                console.log(result.msg);
+
+                window.location.href = '/blankscreen'
+            })
+
+
+
+            
+
+
+
+            const checkUser = async () => {
+
+               const response = await fetch("/check");
+
+                const data = await response.json();
+            
+                if (response.status == 200) {
+                window.location.href = "/deshboard";
+                return;
+                }
+            };
+
+            checkUser();
+            
+
+               
+
+                document.getElementById('logInId').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = "/login"
+                })
+            
+            
+            
+
+        </script>
+        
+
+</html>
+
