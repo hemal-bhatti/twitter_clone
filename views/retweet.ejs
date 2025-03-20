@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReTweet</title>
+
+    <link rel="stylesheet" href="/CSS/retweet.css">
+
 </head>
 <body>
     
@@ -33,7 +36,7 @@ function timeAgo(dateString) {
     if(diffInMonths > 1){
         return `${diffInMonths} months ago`
     }
-    else if(diffInWeeks > 1 && diffInWeeks <= 4){
+    else if(diffInWeeks >= 1 && diffInWeeks <= 4){
         return `${diffInWeeks} weeks ago`
     }
     else if(diffInDays >= 1 && diffInDays <= 7){

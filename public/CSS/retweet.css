@@ -1,0 +1,62 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+
+#allretweets {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+
+#allretweets b {
+    font-size: 1.2em;
+    color: #1da1f2; 
+    display: block;
+    margin-bottom: 5px;
+}
+
+#allretweets label {
+    display: block;
+    font-size: 1em;
+    color: #555;
+    margin: 5px 0;
+    padding-left: 10px;
+    border-left: 3px solid #e1e8ed;
+}
+
+
+#allretweets label b {
+    font-size: 0.9em;
+    color: #888;
+    font-weight: normal;
+}
+
+#allretweets hr {
+    border: none;
+    border-top: 1px solid #e1e8ed;
+    margin: 15px 0;
+}
+
+
+#allretweets label:hover {
+    background-color: #f8f9fa;
+    transition: background-color 0.3s ease;
+}
+

@@ -324,8 +324,16 @@ app.post('/login/user', async (req,res) => {
         })
     })
 
+   
+
     
        let check = await checkForValidUserPromise;
+
+        if(check.length == 0){
+            return res.status(404).json({
+                msg : "user in not valid!"
+            })
+        }
        
        let dbPassward = check[0].passward;
 

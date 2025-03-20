@@ -1,50 +1,110 @@
-body{
-    height: 100%;
-    background-color:#545454;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+
+body {
+    background-color: #f0f2f5;
+    color: #333;
+    padding: 20px;
+}
+
+
+#allpostData {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
 
 .main {
-    border-radius: 15px;
-    width: 430px;
-    background-color: black;
-    color: white;
-    display: flex;
-    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
 }
+
 
 .details {
-    margin-left: 20px;
-    margin-top: 20px;
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px ;
-}
-.details img {
-    margin-top: -5px;
-    margin-left: -5px;
-    height: 40px;
-    width: 40px;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
+.details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1e8ed;
+}
 .name {
     display: flex;
     flex-direction: column;
 }
-.tweets, .time {
-    margin-left: 10px;
+
+.name label {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #1da1f2; 
+}
+.name .email {
+    font-size: 0.9em;
+    color: #657786;
+    margin-top: 2px;
 }
 
-.time {
-    margin-left: 15px;
-    margin-bottom: 5px;
+
+.tweets {
+    font-size: 1em;
+    color: #333;
+    margin-bottom: 15px;
+    word-wrap: break-word;
+    padding: 10px;
+    border-left: 3px solid #e1e8ed;
 }
 
-.email, .time {
-    color: rgb(187 167 167 / 72%);
-    font-size: 13px;
-}
+
 .button {
-    margin-top: 10px;
-    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.button button {
+    background-color: #fff;
+    color: #5e4a17; 
+    border: 1px solid #5e4a17;
+    padding: 8px 15px;
+    font-size: 0.9em;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    height: auto; 
+}
+
+.button button:hover {
+    background-color: #5e4a17;
+    color: #fff;
+}
+
+.button input[type="text"] {
+    padding: 8px;
+    font-size: 0.9em;
+    border: 1px solid #ccd6dd;
     border-radius: 5px;
+    outline: none;
+    width: 100%;
+    max-width: 300px;
+}
+
+.button .time {
+    font-size: 0.85em;
+    color: #657786;
+    margin-left: auto;
 }

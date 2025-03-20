@@ -1,80 +1,115 @@
-body {
-    background-color:#545454;
-    display: flex;
-    justify-content: center;
-    margin-top: 150px;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
+
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    padding: 20px;
+}
+
+
+#twittsform {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
 
 .main {
-    border-radius: 15px;
-    width: 400px;
-    background-color: black;
-    color: white;
     display: flex;
     flex-direction: column;
+    gap: 15px;
 }
 
-::placeholder{
-    color: #642626;
-}
 
 .details {
-    margin-left: 45px;
-    margin-top: 20px;
     display: flex;
-    gap: 10px;
-    margin-bottom: 10px ;
-}
-.details img {
-    margin-top: -5px;
-    margin-left: -10px;
-    height: 40px;
-    width: 40px;
-}
-
-#twittes{
-    display: flex;
-    justify-content: center;
     align-items: center;
-}
-#twitts{
-    width: 300px;
-    height: 25px;
-    border-radius: 5px;
+    gap: 15px;
 }
 
-.name{
+.details img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e1e8ed;
+}
+
+
+.name {
     display: flex;
     flex-direction: column;
 }
 
-.tweets, .time {
-    margin-left: 10px;
+.name label {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #1da1f2; 
 }
 
-.time {
-    margin-left: 15px;
-    margin-bottom: 5px;
+.name .email {
+    font-size: 0.9em;
+    color: #657786;
+    margin-top: 2px;
 }
 
-.email, .time {
-    color: rgb(100, 132, 134);
-    font-size: 13px;
+
+#twittes {
+    width: 100%;
 }
+
+#twittes input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ccd6dd;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+#twittes input[type="text"]:focus {
+    border-color: #1da1f2;
+    box-shadow: 0 0 5px rgba(29, 161, 242, 0.3);
+}
+
+#twittes input[type="text"]::placeholder {
+    color: #aab8c2;
+}
+
+
 .button {
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    justify-content: flex-end;
 }
 
-#button {
-    border-radius: 5px;
-    height: 25px;
-    width: 80px;
+.button input[type="submit"] {
+    background-color: #1da1f2;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#button:hover {
-    background-color: rgb(16, 141, 163);
-    color: white;
+.button input[type="submit"]:hover {
+    background-color: #1991db;
+    transform: translateY(-2px);
+}
+
+.button input[type="submit"]:active {
+    transform: translateY(0);
 }
