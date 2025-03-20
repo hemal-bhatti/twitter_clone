@@ -32,6 +32,12 @@ const signupschema = Joi.object({
     email : Joi.string().email().required(),
 })
 
+const loginschema = Joi.object({
+    email : Joi.string().email().required(),
+    password : Joi.string().required(),
+})
+
+
 
 
 ///////////Data base connection///////
@@ -294,14 +300,19 @@ app.post('/login/user', async (req,res) => {
     let data = req.body
     console.log(data);
 
+    const {error, value} = loginschema.validate(data)
+
+    if(error) {
+        return res.status(400).json({
+            msg : error.details[0].message,
+        })
+    }
+
     let email = data.email;
-    let passward = data.password;
-
-    let hashedPassword =await hashPassword(passward);
-    console.log(hashedPassword);
+    let subPassward = data.password;
 
 
-    let checkForValidUser = `select * from twitter_clone.twitter_login where email = '${email}' and passward = '${hashedPassword}'`
+    let checkForValidUser = `select * from twitter_clone.twitter_login where email = '${email}'`
 
     let checkForValidUserPromise = new Promise((res, rej) => {
         connection.query(checkForValidUser, (err, result) => {
@@ -313,29 +324,29 @@ app.post('/login/user', async (req,res) => {
         })
     })
 
-    try {
-        let check = await checkForValidUserPromise;
-        console.log(check);
-
-
-
-    } catch (error) {
-        
-    }
-
-
-
-    let selectFromTwitterUser = `select * from twitter_clone.twitter_user where email = '${data.email}'`
     
-    let selectUserInfoPromise = new Promise((res, rej) => {
-        connection.query(selectFromTwitterUser, (err, result) => {
-            if(err){
-                return rej(err)
-            }else{
-                return res(result)
-            }
+       let check = await checkForValidUserPromise;
+       
+       let dbPassward = check[0].passward;
+
+
+       let passwardCheck = await bcrypt.compare(subPassward,dbPassward);
+       
+
+       if(passwardCheck) {
+
+
+        let selectFromTwitterUser = `select * from twitter_clone.twitter_user where email = '${data.email}'`
+        
+        let selectUserInfoPromise = new Promise((res, rej) => {
+            connection.query(selectFromTwitterUser, (err, result) => {
+                if(err){
+                    return rej(err)
+                }else{
+                    return res(result)
+                }
+            })
         })
-    })
 
 
     
@@ -366,6 +377,11 @@ app.post('/login/user', async (req,res) => {
         })
     }
 
+       }else{
+            return res.status(401).json({
+                msg : "Invalid Credentials!"
+            })
+       }
 })
 
 
