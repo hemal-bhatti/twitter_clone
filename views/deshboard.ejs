@@ -106,6 +106,7 @@ document.getElementById('paginationNumber').innerHTML = paginationHtml
         let totalpage = result.data.totalPage
         
         
+       console.log(result.data.userDetail[0]);
        
             str += `<tr>`
             for(let [key, value] of Object.entries(result.data.userDetail[0])){
@@ -113,10 +114,12 @@ document.getElementById('paginationNumber').innerHTML = paginationHtml
             }
 
 
-            str += `
+            str += 
+            `
             <th>View User Profile</th>
             <th>Follow</th>
-            </tr>`
+            </tr>
+            `
             
         
 
@@ -282,7 +285,6 @@ document.getElementById('paginationNumber').innerHTML = paginationHtml
             
         }
     getFollowingData()
-
 
 
     document.getElementById('logout').addEventListener('click', (e) => {

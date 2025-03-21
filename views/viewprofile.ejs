@@ -53,6 +53,18 @@
             let result = await respone.json();
             console.log(result.data);
 
+            let profile_image_path = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRIl_pe9IzK6c7SdKf2TS5_q8P43--awu73445aH07eisBuwzwa9vRlZM&s";
+           
+
+            if(result.data.selelctUser[0].profile_picture){
+                let str = result.data.selelctUser[0].profile_picture;
+                let original_path = str.slice(6);
+                console.log(original_path);
+                profile_image_path = original_path
+            }
+
+            console.log('profile',profile_image_path);
+
              
 
                 str += `
@@ -70,7 +82,7 @@
 
                 <div class="profile">
 
-                  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRIl_pe9IzK6c7SdKf2TS5_q8P43--awu73445aH07eisBuwzwa9vRlZM&s" class="rounded-circle" width="80">
+                  <img src="${profile_image_path}" width="80">
                   
                 </div>
 

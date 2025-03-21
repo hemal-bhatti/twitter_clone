@@ -51,23 +51,36 @@
                 e.preventDefault();
 
                 let signupformData = new FormData(signupForm)
+                console.log(signupformData);
+
+                // let selectionFile = await window.showOpenFilePicker();
+                // console.log(selectionFile);
+
+
+                // let respone = await fetch('/signup/user', {
+                //    method : 'POST',
+                //    headers : {
+                //         'Content-Type' : 'application/x-www-form-urlencoded',
+                //    },
+                //    body : new URLSearchParams(signupformData).toString()
+                  
+                // })
 
                 let respone = await fetch('/signup/user', {
                    method : 'POST',
-                   headers : {
-                        'Content-Type' : 'application/x-www-form-urlencoded',
-                   },
-                   body : new URLSearchParams(signupformData).toString()
+                   body : signupformData
                   
                 })
 
                 if(!respone.ok){
                     let result = await respone.json();
-                    alert(`${result.data}`)
+                    alert(`${result.msg}`)
                     console.log('Error in signupUser');
+                    return;
                 }
                 
                 let result = await respone.json();
+                console.log(result);
 
                document.cookie = `Token=${result.data}`
                 

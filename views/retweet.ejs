@@ -77,8 +77,21 @@ function timeAgo(dateString) {
                 let tweetTime = timeAgo(result.data[i].tweetTime)
                 let reTweetTime = timeAgo(result.data[i].reTweetTime)
 
+                let post_image = ""
+                if(result.data[i].post_picture){
+                    let post_original_path = result.data[i].post_picture.slice(6);
+                    post_image = post_original_path;
+                }
+
 
                 str += `<b>${result.data[i].first_name} ${result.data[i].last_name} : </b>
+                        <br>
+
+                        <div class='post_picture' ${result.data[i].post_picture ? result.data[i].post_picture : 'hidden'}>
+                            <img src=${post_image} alt="photo" style="height:200px;width:150px">
+                        </div>
+
+
                          <br>
                         <lable> ${result.data[i].twitts_data}  <b> ${tweetTime} </b> </lable>
                         <br>

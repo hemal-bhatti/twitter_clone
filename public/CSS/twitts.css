@@ -85,7 +85,7 @@ body {
 
 #twittes input[type="text"]::placeholder {
     color: #aab8c2;
-}
+} 
 
 
 .button {
@@ -93,7 +93,7 @@ body {
     justify-content: flex-end;
 }
 
-.button input[type="submit"] {
+ .button input[type="submit"] {
     background-color: #1da1f2;
     color: #fff;
     border: none;
@@ -107,9 +107,18 @@ body {
 
 .button input[type="submit"]:hover {
     background-color: #1991db;
-    transform: translateY(-2px);
+    
 }
 
-.button input[type="submit"]:active {
-    transform: translateY(0);
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+input[type="file"]:hover {
+    border-color: #007BFF;
 }

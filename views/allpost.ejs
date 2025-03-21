@@ -81,20 +81,41 @@ function timeAgo(dateString) {
 
                  let time = timeAgo(result.postData[i].post_date);
 
+                 let profile_image_path = "https://cdn-icons-png.flaticon.com/128/3670/3670151.png"
+    
+
+                if(result.postData[i].profile){
+                    let str = result.postData[i].profile
+                    let original_path = str.slice(6);
+                    profile_image_path = original_path
+                }
+
+                let post_image = ""
+                if(result.postData[i].post_picture){
+                    let post_original_path = result.postData[i].post_picture.slice(6);
+
+                    post_image = post_original_path;
+                }
+
                 str += 
                 `
             <div class="main">
                     <div class="details">
 
                             <div>
-                                <img src="https://cdn-icons-png.flaticon.com/128/3670/3670151.png" alt="photo">
+                                <img src=${profile_image_path} alt="photo">
                             </div>
                             <div class="name">
                                 <label for=""> ${result.postData[i].first_name}  ${result.postData[i].last_name}</label>
                                 <label for="" class="email">${result.postData[i].email}</label>
                             </div>
                     </div>
+
+                    <div class='post_picture' ${result.postData[i].post_picture ? result.postData[i].post_picture : 'hidden'}>
+                        <img src=${post_image} alt="photo" style="height:200px;width:150px">
+                    </div>
         
+
                     <div class="tweets">
                         ${result.postData[i].post_content}
                     </div>

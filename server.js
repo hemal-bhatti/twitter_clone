@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 const Joi = require('joi')
 const cookie = require('cookie-parser');
 const bcrypt = require('bcrypt')
+const multer = require('multer')
+const path = require('path')
+const fs = require('fs').promises;
 
 
 const app = express();
@@ -21,6 +24,19 @@ app.use(cookie());
 
 // app.use(cors ({ origin : true }))
 app.use(cors());
+
+
+//////////for profile photo/////////
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/uploads/',)
+    },
+    filename : (req, file, cb) => {
+        // console.log("file ",file);
+        cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`)
+    }
+})
+const upload = multer({ storage });
 
 
 
@@ -239,23 +255,37 @@ app.get('/viewprofile', authMiddleware, (req,res) => {
 
 
 ////////signup user /////entry in database/////
-app.post('/signup/user', async (req,res) => {
+app.post('/signup/user',upload.any(), async (req,res) => {
+
     let signupData = req.body;
+    let file = req.files;
+    // console.log(file);
     
     const {error, value} = signupschema.validate(signupData)
 
-    if(error) {
-        // console.log('error in signup data validation', error);
-        return res.status(400).json({
-            data : error.details[0].message,
-            msg : "validation Failed!"
-        })
-    }
+    console.log("value of validation is : ",{ val : value });
 
+    if (error) {
+
+        console.log('inside error of image..');
+
+        console.log('error is in joi', error.details[0].message);
+            if(file){
+                console.log('file is not uploaded!');
+                await fs.unlink(file[0].path)
+            }
+    
+            return res.status(400).json({
+                data : error.details[0].message,
+                msg : "validation Failed!"
+            })
+        }
+
+        
     let insertSignupInfo = `insert into twitter_clone.twitter_user
-    (first_name, last_name,phone_number,email)
+    (first_name, last_name,phone_number,email, profile_picture)
     values 
-    ('${signupData.first_name}','${signupData.last_name}','${signupData.phone}','${signupData.email}')
+    ('${signupData.first_name}','${signupData.last_name}','${signupData.phone}','${signupData.email}','${file[0].path}')
     `
 
     let signupInfoPromise = new Promise((res, rej) => {
@@ -280,14 +310,20 @@ app.post('/signup/user', async (req,res) => {
         let result = await signupInfoPromise;
 
         return res.status(200).json({
-
             data : generatesignUpToken,
             msg : "User is signed up !!"
         })
 
     } catch (error) {
+
+        // also need to remove from here..
+        if(file){
+            console.log('file is not uploaded!');
+            await fs.unlink(file[0].path)
+        }
+
         return res.status(401).json({
-            msg : "Data is not inserted into twitter user!", error
+            msg : `Data is not inserted into twitter user!${error}`
         })
     }
     
@@ -439,27 +475,22 @@ app.get('/deshboard/list/getdata', authMiddleware ,async (req,res) => {
             LIMIT ${pageSize} 
             OFFSET ${offset};
             `
+            const selectUserPromise = new Promise( (res, rej) => {
+                connection.query(selectInJobUser, (err,result) => {
+                    if(err){ 
+                        return rej(err)
+                    }
+                     return res(result);
+                })
+            })
             
             
-    let totalJobUser = `select count(tu.user_id) as cnt
-            FROM twitter_user as tu
-            LEFT JOIN twitter_follow as tf
-            ON user_id = whomtofollow_id
-            WHERE tu.user_id not in (select tu.user_id
+    let totalJobUser = `select count(*) as cnt from twitter_user WHERE user_id not in (select tu.user_id
             FROM twitter_user as tu
             JOIN twitter_follow as tf
             ON user_id = whomtofollow_id
-            WHERE tf.whoisfollow_id = ${data.user_id});`
-
-
-    const selectUserPromise = new Promise( (res, rej) => {
-        connection.query(selectInJobUser, (err,result) => {
-            if(err){ 
-                return rej(err)
-            }
-             return res(result);
-        })
-    })
+            WHERE tf.whoisfollow_id = ${data.user_id})
+            AND user_id != ${data.user_id};`
 
     
     const countUserPromise = new Promise( (res, rej) => {
@@ -476,17 +507,16 @@ app.get('/deshboard/list/getdata', authMiddleware ,async (req,res) => {
         
             let result1 = await selectUserPromise;
             let result2 = await countUserPromise;
+            
+
             let totalPage = Math.ceil(result2[0].cnt / pageSize);
             let yourFollower = await yourFollowerPromise;
-            
-        
         
             res.send({
-        
                 data : {
                     yourFollower : yourFollower,
                     currentpage : currentpage,
-                    userDetail : result1,
+                    userDetail : result1,   
                     totalData : result2,
                     totalPage : totalPage
                 }
@@ -591,15 +621,15 @@ app.post('/deshboard/list/follow', authMiddleware, async (req,res) => {
 
 
 //////////////////////////add new twittes/////////////////////////
-app.post('/deshboard/new/twitts', authMiddleware, async (req,res) => {
+app.post('/deshboard/new/twitts' ,authMiddleware, upload.any(), async (req,res) => {
 
-    // console.log(req.user);
-    // console.log(req.body);
+    let file = req.files;
+    console.log(file);
 
     let insertIntoUser_twittes = `insert into twitter_clone.twitter_create_post 
-    (user_id, twitts_data)
+    (user_id, twitts_data, post_picture)
     values
-    ('${req.user.user_id}','${req.body.twitts}' )`
+    ('${req.user.user_id}','${req.body.twitts}','${file[0].path}' )`
 
 
     let insertUser_twittesPromise = new Promise((res, rej) => {
@@ -622,6 +652,12 @@ app.post('/deshboard/new/twitts', authMiddleware, async (req,res) => {
         })
     
     } catch (error) {
+
+        if(file){
+            console.log('file is not uploaded!');
+            await fs.unlink(file[0].path)
+        }
+
         return res.status(401).json({
             msg : "error in insert into user_twittes!"
         })
@@ -644,7 +680,9 @@ app.get('/deshboard/all/twitts', authMiddleware, async(req,res) => {
     tu.first_name AS first_name,
 	tu.last_name AS last_name,
     tu.email AS email,
+    tu.profile_picture  profile,
     tcp.created_at AS post_date,
+    tcp.post_picture AS post_picture,
     COUNT(pl.like_id) AS like_count
     FROM 
         twitter_create_post as tcp
@@ -682,7 +720,6 @@ app.get('/deshboard/all/twitts', authMiddleware, async(req,res) => {
         return res.status(200).json({
 
             postData: postData,
-            
             msg: "all post data fetch successfully"
         });
       
@@ -849,7 +886,7 @@ app.post('/deshboard/all/retweet', authMiddleware, async(req,res) => {
 /////////////////////////////display all reTweets//////////////////////
 app.get('/deshboard/allretweet', authMiddleware, async (req,res) => {
 
-    let selectAllRetweet = `select  tuser.user_id, tuser.first_name, tuser.last_name, post.twitts_data, rt.whichpost_id, rt.retweet_data ,rt.post_user_id, rt.who_retweet_id, rt.created_at as reTweetTime, post.created_at as tweetTime
+    let selectAllRetweet = `select  tuser.user_id, tuser.first_name, tuser.last_name, post.twitts_data, rt.whichpost_id, rt.retweet_data ,rt.post_user_id, rt.who_retweet_id, post.post_picture ,rt.created_at as reTweetTime, post.created_at as tweetTime
                             from reTweet as rt
                             inner join  twitter_create_post as post
                             on rt.whichpost_id = post.post_id

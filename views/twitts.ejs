@@ -26,6 +26,12 @@
             <br>
             
             <div id="twittes">
+
+                <label for="post_Image">select Post Image : </label>
+                <input type="file" name="post_Image" id="post_Image">
+                <br>
+                <br>
+
                 <input type="text" name="twitts" id="twitts" placeholder="what's happening..">
             </div>
 
@@ -53,12 +59,17 @@
 
             let twittsFormData = new FormData(form);
 
+            // let respone = await fetch('/deshboard/new/twitts', {
+            //     method : 'POST',
+            //     headers : {
+            //             'Content-Type' : 'application/x-www-form-urlencoded',
+            //     },
+            //     body : new URLSearchParams(twittsFormData).toString()
+            // })
+
             let respone = await fetch('/deshboard/new/twitts', {
                 method : 'POST',
-                headers : {
-                        'Content-Type' : 'application/x-www-form-urlencoded',
-                },
-                body : new URLSearchParams(twittsFormData).toString()
+                body : twittsFormData
             })
 
             if(!respone.ok){
@@ -73,13 +84,8 @@
 
         })
 
-
-
-
     </script>
     
-
-
-
 </body>
+
 </html>
